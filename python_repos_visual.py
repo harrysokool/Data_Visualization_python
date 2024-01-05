@@ -18,20 +18,60 @@ repo_dicts = response_dict['items']
 
 repo_names = []
 stars = []
+labels = []
+repo_links = []
 for repo_dict in repo_dicts:
     repo_names.append(repo_dict['name'])
     stars.append(repo_dict['stargazers_count'])
 
+    owner = repo_dict['owner']['login']
+    description = repo_dict['description']
+    label = f"{owner}<br />{description}"
+    labels.append(label)
+
+    repo_name = repo_dict['name']
+    repo_url = repo_dict['html_url']
+    repo_link = f"<a href='{repo_url}'>{repo_name}</a>"
+    repo_links.append(repo_link)
+
 data = [{
     'type': 'bar',
-    'x': repo_names,
-    'y': stars
+    'x': repo_links,
+    'y': stars,
+    'hovertext': labels,
+    'marker': {
+        'color': 'rgb(60, 100, 150)',
+        'line': {
+            'width': 1.5,
+            'color': 'rgb(25, 25, 25)'
+        }
+    },
+    'opacity': 0.6
 }]
 
 my_layout = {
-    'title': "'Most-Starred Python Projects on GitHub",
-    'xaxis': {'title': 'Repo'},
-    'yaxis': {'title': 'Stars'}
+    'title': "Most-Starred Python Projects on GitHub",
+    'titlefont': {
+        'size': 28
+    },
+    'xaxis': {
+        'title': 'Repo',
+        'titlefont': {
+            'size': 15
+        },
+        'tickfont': {
+            'size': 15
+        }
+    },
+    'yaxis': {
+        'title': 'Stars',
+        'titlefont': {
+            'size': 15
+        },
+        'tickfont': {
+            'size': 15
+        }
+    }
 }
 
 fig = {'data': data, 'layout': my_layout}
